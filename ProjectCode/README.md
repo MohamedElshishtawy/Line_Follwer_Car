@@ -2,24 +2,194 @@
 
 ## Files Summary
 
-1. **car1.ino**
-   - Advanced line-following robot controller using 5 IR sensors and PD control.
-   - Includes turn detection (90 degree left/right and U-turn), lost-line handling, and motor speed correction.
-
-2. **cardirectiontest1.ino**
+1. **cardirectiontest1.ino**
    - Basic motor direction test sketch.
    - Runs the robot through forward, backward, right, left, and stop in timed sequence.
-
-3. **LineFollower2IRtest2.ino**
+     
+2. **LineFollower2IRtest2.ino**
    - Simple 2-IR line follower.
    - Reads left/right sensors and chooses movement: forward, left, right, or stop.
+  
+3. **car1.ino**
+   - Advanced line-following robot controller using 5 IR sensors and PD control.
+   - Includes turn detection (90 degree left/right and U-turn), lost-line handling, and motor speed correction.
 
 4. **line_follower_kinematics.m.txt**
    - MATLAB simulation of differential-drive robot kinematics on a window-shaped track.
    - Computes wheel angular velocities, integrates pose, and animates robot motion for two laps.
 
 ---
+---
 
+## cardirectiontest1.ino
+
+```cpp
+#define speedL 10
+#define IN1 9
+#define IN2 8
+#define IN3 7
+#define IN4 6
+#define speedR 5
+//adel ehab adel
+void setup()
+{
+  Serial.begin(9600);
+
+  for(int i=5; i<=10; i++)
+  {
+    pinMode(i, OUTPUT);
+  }
+}
+
+void forward()
+{
+  digitalWrite(IN1, HIGH);
+  digitalWrite(IN2, LOW);
+  digitalWrite(IN3, HIGH);
+  digitalWrite(IN4, LOW);
+  analogWrite(speedL, 150);
+  analogWrite(speedR, 150);
+}
+
+void backward()
+{
+  digitalWrite(IN1, LOW);
+  digitalWrite(IN2, HIGH);
+  digitalWrite(IN3, LOW);
+  digitalWrite(IN4, HIGH);
+  analogWrite(speedL, 150);
+  analogWrite(speedR, 150);
+}
+
+void left()
+{
+  digitalWrite(IN1, LOW);
+  digitalWrite(IN2, LOW);
+  digitalWrite(IN3, HIGH);
+  digitalWrite(IN4, LOW);
+  analogWrite(speedL, 0);
+  analogWrite(speedR, 150);
+}
+
+void right()
+{
+  digitalWrite(IN1, HIGH);
+  digitalWrite(IN2, LOW);
+  digitalWrite(IN3, LOW);
+  digitalWrite(IN4, LOW);
+  analogWrite(speedL, 150);
+  analogWrite(speedR, 0);
+}
+
+void stopMotor()
+{
+  digitalWrite(IN1, LOW);
+  digitalWrite(IN2, LOW);
+  digitalWrite(IN3, LOW);
+  digitalWrite(IN4, LOW);
+  analogWrite(speedL, 0);
+  analogWrite(speedR, 0);
+}
+
+void loop()
+{
+  forward();
+  delay(2000);
+
+  backward();
+  delay(2000);
+
+  right();
+  delay(2000);
+
+  left();
+  delay(2000);
+
+  stopMotor();
+  delay(2000);
+}
+```
+---
+
+## LineFollower2IRtest2.ino
+
+```cpp
+#define speedL 10
+ #define IN1 9
+ #define IN2 8
+ #define IN3 7
+ #define IN4 6
+ #define speedR 5
+ #define sensorL 4
+ #define sensorR 3
+ int sl=0;
+ int sr=0;
+ //adel ehab adel
+ void setup() {  
+for(int i=5;i<=10;i++)
+ {
+ pinMode(i, OUTPUT); 
+}  
+pinMode(sensorR, INPUT);
+ pinMode(sensorL, INPUT);
+ }
+ void forword()
+ {
+ digitalWrite(IN1, HIGH);
+ digitalWrite(IN2, LOW); 
+digitalWrite(IN3, HIGH); 
+digitalWrite(IN4, LOW);
+ analogWrite(speedL,100);
+ analogWrite(speedR,100); 
+}
+ void backword()
+ {
+ digitalWrite(IN1, LOW);
+ digitalWrite(IN2, HIGH); 
+digitalWrite(IN3, LOW); 
+digitalWrite(IN4, HIGH);
+ analogWrite(speedL,100);
+ analogWrite(speedR,100);  
+}
+ void left()
+ {
+ digitalWrite(IN1, LOW);
+ digitalWrite(IN2, LOW); 
+digitalWrite(IN3, HIGH); 
+digitalWrite(IN4, LOW); 
+analogWrite(speedL,0);
+ analogWrite(speedR,100); 
+}
+ void right()
+ {
+ digitalWrite(IN1, HIGH);
+ digitalWrite(IN2, LOW); 
+digitalWrite(IN3, LOW); 
+digitalWrite(IN4, LOW);
+ analogWrite(speedL,100);
+ analogWrite(speedR,0); 
+}
+ void stopp(){
+ digitalWrite(IN1, LOW);
+ digitalWrite(IN2, LOW); 
+digitalWrite(IN3, LOW); 
+digitalWrite(IN4, LOW); 
+analogWrite(speedL,0);
+ analogWrite(speedR,0); 
+}
+ void loop(){
+ sl=digitalRead(sensorL);
+ sr=digitalRead(sensorR);
+ if (sl==0&&sr==0)
+ forword();
+ else if (sl==0&&sr==1)
+ right();
+ else if (sl==1&&sr==0)
+ left();
+ else if (sl==1&&sr==1)
+ stopp();  
+}
+```
 ## car1.ino
 
 ```cpp
@@ -234,178 +404,6 @@ void loop() {
 }
 ```
 
----
-
-## cardirectiontest1.ino
-
-```cpp
-#define speedL 10
-#define IN1 9
-#define IN2 8
-#define IN3 7
-#define IN4 6
-#define speedR 5
-//adel ehab adel
-void setup()
-{
-  Serial.begin(9600);
-
-  for(int i=5; i<=10; i++)
-  {
-    pinMode(i, OUTPUT);
-  }
-}
-
-void forward()
-{
-  digitalWrite(IN1, HIGH);
-  digitalWrite(IN2, LOW);
-  digitalWrite(IN3, HIGH);
-  digitalWrite(IN4, LOW);
-  analogWrite(speedL, 150);
-  analogWrite(speedR, 150);
-}
-
-void backward()
-{
-  digitalWrite(IN1, LOW);
-  digitalWrite(IN2, HIGH);
-  digitalWrite(IN3, LOW);
-  digitalWrite(IN4, HIGH);
-  analogWrite(speedL, 150);
-  analogWrite(speedR, 150);
-}
-
-void left()
-{
-  digitalWrite(IN1, LOW);
-  digitalWrite(IN2, LOW);
-  digitalWrite(IN3, HIGH);
-  digitalWrite(IN4, LOW);
-  analogWrite(speedL, 0);
-  analogWrite(speedR, 150);
-}
-
-void right()
-{
-  digitalWrite(IN1, HIGH);
-  digitalWrite(IN2, LOW);
-  digitalWrite(IN3, LOW);
-  digitalWrite(IN4, LOW);
-  analogWrite(speedL, 150);
-  analogWrite(speedR, 0);
-}
-
-void stopMotor()
-{
-  digitalWrite(IN1, LOW);
-  digitalWrite(IN2, LOW);
-  digitalWrite(IN3, LOW);
-  digitalWrite(IN4, LOW);
-  analogWrite(speedL, 0);
-  analogWrite(speedR, 0);
-}
-
-void loop()
-{
-  forward();
-  delay(2000);
-
-  backward();
-  delay(2000);
-
-  right();
-  delay(2000);
-
-  left();
-  delay(2000);
-
-  stopMotor();
-  delay(2000);
-}
-```
-
----
-
-## LineFollower2IRtest2.ino
-
-```cpp
-#define speedL 10
- #define IN1 9
- #define IN2 8
- #define IN3 7
- #define IN4 6
- #define speedR 5
- #define sensorL 4
- #define sensorR 3
- int sl=0;
- int sr=0;
- //adel ehab adel
- void setup() {  
-for(int i=5;i<=10;i++)
- {
- pinMode(i, OUTPUT); 
-}  
-pinMode(sensorR, INPUT);
- pinMode(sensorL, INPUT);
- }
- void forword()
- {
- digitalWrite(IN1, HIGH);
- digitalWrite(IN2, LOW); 
-digitalWrite(IN3, HIGH); 
-digitalWrite(IN4, LOW);
- analogWrite(speedL,100);
- analogWrite(speedR,100); 
-}
- void backword()
- {
- digitalWrite(IN1, LOW);
- digitalWrite(IN2, HIGH); 
-digitalWrite(IN3, LOW); 
-digitalWrite(IN4, HIGH);
- analogWrite(speedL,100);
- analogWrite(speedR,100);  
-}
- void left()
- {
- digitalWrite(IN1, LOW);
- digitalWrite(IN2, LOW); 
-digitalWrite(IN3, HIGH); 
-digitalWrite(IN4, LOW); 
-analogWrite(speedL,0);
- analogWrite(speedR,100); 
-}
- void right()
- {
- digitalWrite(IN1, HIGH);
- digitalWrite(IN2, LOW); 
-digitalWrite(IN3, LOW); 
-digitalWrite(IN4, LOW);
- analogWrite(speedL,100);
- analogWrite(speedR,0); 
-}
- void stopp(){
- digitalWrite(IN1, LOW);
- digitalWrite(IN2, LOW); 
-digitalWrite(IN3, LOW); 
-digitalWrite(IN4, LOW); 
-analogWrite(speedL,0);
- analogWrite(speedR,0); 
-}
- void loop(){
- sl=digitalRead(sensorL);
- sr=digitalRead(sensorR);
- if (sl==0&&sr==0)
- forword();
- else if (sl==0&&sr==1)
- right();
- else if (sl==1&&sr==0)
- left();
- else if (sl==1&&sr==1)
- stopp();  
-}
-```
 
 ---
 
